@@ -1,0 +1,22 @@
+body {
+    font-family: Arial, sans-serif;
+}
+
+.container {
+    padding: 20px;
+}
+
+#eventUrl {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 10px;
+}
+
+#inviteButton {
+    padding: 10px;
+    background-color: #0077b5;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+    width: 100%;
+}
