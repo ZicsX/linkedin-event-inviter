@@ -15,12 +15,17 @@ module.exports = async function inviteToEvent(cookies, eventUrl) {
         // Navigate to the event page
         await page.goto(eventUrl, { waitUntil: 'networkidle2' });
 
-        // Check if the Attend button is present
-        const attendButton = await page.$('button.artdeco-button.artdeco-button--2.artdeco-button--primary');
-        if (attendButton) {
-            await attendButton.click();
-            // Wait for the page to reload
-            await page.waitForNavigation({ waitUntil: 'networkidle2' });
+        // Check if the Share button is present
+        const shareButton = await page.$('button.artdeco-dropdown__trigger.artdeco-dropdown__trigger--placement-bottom');
+        
+        // If Share button is not present
+        if (!shareButton) {
+            const attendButton = await page.$('button.artdeco-button.artdeco-button--2.artdeco-button--primary');
+            if (attendButton) {
+                await attendButton.click();
+                // Wait for the page to reload
+                await page.waitForNavigation({ waitUntil: 'networkidle2' });
+            }
         }
 
         // Go to the invite people page
