@@ -1,8 +1,9 @@
 document.getElementById("inviteButton").addEventListener("click", () => {
-    const eventUrl = document.getElementById("eventUrlInput").value;
+    let eventUrl = document.getElementById("eventUrlInput").value;
 
-    // Validate URL
-    if (!eventUrl || !isValidUrl(eventUrl)) {
+    // Validate and sanitize URL
+    eventUrl = sanitizeAndValidateUrl(eventUrl);
+    if (!eventUrl) {
         alert("Please enter a valid LinkedIn event URL.");
         return;
     }
@@ -11,11 +12,29 @@ document.getElementById("inviteButton").addEventListener("click", () => {
     chrome.runtime.sendMessage({ action: "extractCookiesAndSend", eventUrl });
 });
 
-function isValidUrl(string) {
+function sanitizeAndValidateUrl(string) {
     try {
-        new URL(string);
+        const url = new URL(string);
+
+        // Check if the host is linkedin.com
+        if (url.hostname !== 'www.linkedin.com') {
+            return false;
+        }
+
+        // Check if the path starts with /events/
+        if (!url.pathname.startsWith('/events/')) {
+            return false;
+        }
+
+        // Truncate to base event URL
+        const parts = url.pathname.split('/');
+        if (parts.length > 3) {
+            url.pathname = `/${parts[1]}/${parts[2]}`;
+        }
+
+        return url.toString();
+
     } catch (_) {
-        return false;  
+        return false;
     }
-    return true;
 }
