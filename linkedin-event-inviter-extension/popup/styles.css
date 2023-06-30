@@ -19,4 +19,10 @@ body {
     border: none;
     cursor: pointer;
     width: 100%;
+    transition: background-color 0.3s ease;
+}
+
+#inviteButton:disabled {
+    background-color: #9dbdd6;
+    cursor: not-allowed;
 }

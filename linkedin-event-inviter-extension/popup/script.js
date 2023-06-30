@@ -1,15 +1,17 @@
-document.getElementById("inviteButton").addEventListener("click", () => {
-    let eventUrl = document.getElementById("eventUrlInput").value;
-
-    // Validate and sanitize URL
-    eventUrl = sanitizeAndValidateUrl(eventUrl);
-    if (!eventUrl) {
-        alert("Please enter a valid LinkedIn event URL.");
-        return;
-    }
-
-    // Send a message to the background script to extract cookies and send the request
-    chrome.runtime.sendMessage({ action: "extractCookiesAndSend", eventUrl });
+document.addEventListener("DOMContentLoaded", function () {
+    // Check current tab URL for event page
+    chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
+        // Validate and sanitize URL
+        var sanitizedUrl = sanitizeAndValidateUrl(tabs[0].url);
+        if (sanitizedUrl) {
+            // document.getElementById("url").textContent = sanitizedUrl;
+            const inviteButton = document.getElementById("inviteButton");
+            inviteButton.disabled = false;
+            inviteButton.addEventListener("click", () => {
+                chrome.runtime.sendMessage({ action: "extractCookiesAndSend", eventUrl: sanitizedUrl });
+            });
+        }        
+    });
 });
 
 function sanitizeAndValidateUrl(string) {

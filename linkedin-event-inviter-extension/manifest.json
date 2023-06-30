@@ -4,7 +4,8 @@
     "version": "1.0",
     "description": "A Chrome extension to invite LinkedIn connections to an event",
     "permissions": [
-        "cookies"
+        "cookies",
+        "tabs"
     ],
     "host_permissions": [
         "https://*.linkedin.com/*"
