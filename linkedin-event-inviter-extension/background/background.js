@@ -4,11 +4,6 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
 
         // Extract LinkedIn cookies
         chrome.cookies.getAll({ domain: "linkedin.com" }, (cookies) => {
-
-            // Log the cookies and eventUrl
-            // console.log("LinkedIn Cookies:", cookies);
-            // console.log("Event URL:", eventUrl);
-            
             // Send a POST request to the server with cookies and event URL
             fetch('http://localhost:3000/invite', {
                 method: 'POST',
@@ -20,11 +15,24 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
                     eventUrl: eventUrl,
                 }),
             })
-            .then(response => response.text()) // Use .text() instead of .json()
+            .then(response => response.text())
             .then(responseText => {
-                console.log('Server Response:', responseText);
+                // Invitaion Notification
+                chrome.notifications.create({
+                    type: 'basic',
+                    iconUrl: '../assets/icon.png',
+                    title: 'Invitations Sent!',
+                    message: 'Invitations sent successfully.'
+                });
             })
-            .catch(error => console.error('Error:', error));
+            .catch(error => {console.error('Error:', error);
+                chrome.notifications.create({
+                    type: 'basic',
+                    iconUrl: '../assets/icon.png',
+                    title: 'Failed to send invitations',
+                    message: 'There was an error sending the invitations.'
+                });
+            });
         });
     }
 });
