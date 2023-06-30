@@ -24,15 +24,13 @@ function sanitizeAndValidateUrl(string) {
         }
 
         // Check if the path starts with /events/
-        if (!url.pathname.startsWith('/events/')) {
+        const parts = url.pathname.split('/');
+        if (!url.pathname.startsWith('/events/') || parts.length < 3 || !parts[2]) {
             return false;
         }
 
         // Truncate to base event URL
-        const parts = url.pathname.split('/');
-        if (parts.length > 3) {
-            url.pathname = `/${parts[1]}/${parts[2]}`;
-        }
+        url.pathname = `/${parts[1]}/${parts[2]}`;
 
         return url.toString();
 
